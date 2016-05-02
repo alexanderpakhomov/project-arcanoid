@@ -4,20 +4,22 @@ from pygame.locals import *
 
 class Circle(pygame.sprite.Sprite):
 
-    def __init__(self, x = 200, y = 100, r = 10,vx = 0, vy = 170, colour = (255,255,255)):
+    def __init__(self, x = 200, y = 100, r = 10,vx = 0, vy = 170, colour = (25,205,145)):
         """Constructor of Player class"""
-        """self.a - acceleration"""
+        """self.a - acceleration""" #Don't know
         """self.r - radius"""
         pygame.sprite.Sprite.__init__(self)
-        self.x, self.y, self.r, self.vx, self.vy, self.colour = \
-                x, y, r, vx, vy, colour
+        self.x = x
+        self.y = y
+        self.r = r
+        self.vx = vx
+        self.vy = vy
+        self.colour = colour
         square_1_color = (255,255,255)
 
     def render(self, game):
         """Draw Player on the Game window"""
-        pygame.draw.circle(game.screen,
-                self.colour,
-                (int(self.x), int(self.y)), self.r)
+        pygame.draw.circle(game.screen, self.colour, (int(self.x), int(self.y)), self.r)
 
     def update(self, game):
         """Constant speed of the ball"""
@@ -86,13 +88,11 @@ class Platform_main(pygame.sprite.Sprite):
 
 
     def render(self, game):
-        """Draw Player on the Game window"""
-        pygame.draw.rect(game.screen,
-                self.colour,
-                (int(self.x), int(self.y), self.a, self.b))
+        #Draw Player on the Game window
+        pygame.draw.rect(game.screen, self.colour, (int(self.x), int(self.y), self.a, self.b))
 
     def update(self, game):
-        """Update Player state"""
+        #Update Players platform
         self.rect = pygame.Rect(self.x, self.y, self.a, self.b)
         self.vx = 0
         if game.pressed[pygame.K_LEFT]:
@@ -111,14 +111,13 @@ class Platform_main(pygame.sprite.Sprite):
 class Game:
     def tick(self):
         """Return time in seconds since previous call
-        and limit speed of the game to 50 fps"""
-        self.delta = self.clock.tick(50) / 1000.0
+        and limit speed of the game to 60 fps"""
+        self.delta = self.clock.tick(60) / 1000.0
 
     def __init__(self):
         """Constructor of the Game"""
         self._running = True
-        self.size = self.width, self.height = 640, 400
-        # create main display - 640x400 window
+        self.size = self.width, self.height = 640, 400 # create main display - 640x400 window
         # try to use hardware acceleration
         self.screen = pygame.display.set_mode(self.size, pygame.HWSURFACE)
         # set window caption
@@ -130,11 +129,15 @@ class Game:
         self.player = Circle()
         self.platforms = {
             0: Platform_main(),
-            1: Platform(),
+            1: Platform(x = 145, y = 50),
             2: Platform(x = 145, y = 10),
             3: Platform(x = 265, y = 10),
             4: Platform(x = 385, y = 10),
-            5: Platform(x = 505, y = 10)
+            5: Platform(x = 505, y = 10),
+            6: Platform(x = 205, y = 25),
+            7: Platform(x = 325, y = 25),
+            8: Platform(x = 445, y = 25),
+            9: Platform(x = 25, y = 25),
         }
         self.to_remove = set()
         self.error = False
@@ -184,7 +187,7 @@ class Game:
 
     def render(self):
         """Render the scene"""
-        self.screen.fill((0, 0, 0))
+        self.screen.fill((45, 16, 20))
         self.player.render(self)
         for i in self.platforms:
             self.platforms[i].render(self)
